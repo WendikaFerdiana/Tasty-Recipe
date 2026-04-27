@@ -9,12 +9,7 @@
     </header>
 </template>
 
-<script>
+<script setup>
 import NavigationBar from "./NavigationBar.vue";
 
-export default {
-    components: {
-        NavigationBar
-    }
-}
 </script>

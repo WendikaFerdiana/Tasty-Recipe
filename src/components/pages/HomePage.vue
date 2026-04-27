@@ -9,14 +9,12 @@
                 you follow.
             </p>
         </div>
-        
-        <RecipeList :recipes="recipeData" />
-        
+        <recipe-list :recipes="recipeList"></recipe-list>
     </div>
 </template>
-
 <script setup>
-
 import RecipeList from "../recipe/RecipeList.vue";
+import RECIPE_DATA from "../../recipe.js";
 
+const recipeList = RECIPE_DATA;
 </script>
