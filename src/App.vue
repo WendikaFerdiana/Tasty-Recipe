@@ -2,7 +2,6 @@
   <div>
     <web-header></web-header>
     <router-view></router-view>
-    <home-page></home-page>
     <web-footer></web-footer>
 
   </div>
@@ -10,7 +9,6 @@
 
 <script setup>
 import WebHeader from "./components/header/WebHeader.vue"
-import HomePage from "./components/pages/HomePage.vue"
 import WebFooter from "./components/footer/WebFooter.vue"
 
 </script>

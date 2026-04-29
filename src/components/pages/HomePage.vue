@@ -9,12 +9,27 @@
                 you follow.
             </p>
         </div>
-        <recipe-list :recipes="recipeList"></recipe-list>
+        <recipe-list :recipes="recipeList" v-if="recipelistStatus">
+        </recipe-list>
     </div>
 </template>
 <script setup>
 import RecipeList from "../recipe/RecipeList.vue";
-import RECIPE_DATA from "../../recipe.js";
+import { onMounted, ref } from "vue";
+import { useStore } from "vuex";
 
-const recipeList = RECIPE_DATA;
+const store = useStore();
+const recipelistStatus = ref(false);
+const recipeList = ref();
+
+onMounted(async () => {
+    try {
+        await store.dispatch("recipe/getRecipeData");
+        recipeList.value = store.state.recipe.recipes;
+        recipelistStatus.value = true;
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 </script>
