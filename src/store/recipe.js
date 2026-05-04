@@ -4,29 +4,41 @@ export default {
     namespaced: true,
     state() {
         return {
-            recipes: []
+            recipes: [],
+            recipeDetail: {}
         }
     },
     getters: {},
     mutations: {
         setRecipeData(state, payload) {
-            state.recipes = payload
+            state.recipes = payload;
+        },
+        setRecipeDetail(state, payload) {
+            state.recipeDetail = payload;
         }
-    },
-    actions: {
-        async getRecipeData({ commit }){
-            try{
-                const {data} = await axios.get("https://recipe-vue-batch2-default-rtdb.firebaseio.com/recipes.json")
-                const arr = []
-                for (let key in data){
+    }, 
+    
+    actions: { 
+        async getRecipeData({ commit }) {
+            try {
+                const {data} = await axios.get("https://recipe-vue-batch2-default-rtdb.firebaseio.com/recipes.json");
+                const arr = [];
+                for (let key in data) {
                     arr.push({
                         id: key,
                         ...data[key]
-                    })
+                    });
                 }
-                commit("setRecipeData", arr)
+                commit("setRecipeData", arr);
+            } catch (err) {
+                console.error(err);
             }
-            catch (err){
+        },
+        async getRecipeDetail({ commit }, id) {
+            try {
+                const { data } = await axios.get(`https://recipe-vue-batch2-default-rtdb.firebaseio.com/recipes/${id}.json`);
+                commit("setRecipeDetail", data);
+            } catch (err) {
                 console.error(err);
             }
         }
