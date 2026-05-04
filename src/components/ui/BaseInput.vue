@@ -12,10 +12,10 @@
             :type="type" 
             :id="identity"
             :placeholder="placeholder" 
+            :readonly="readonly === '1'" 
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
-            :readonly="readonly === '1'" 
-        />
+            @keyup="$emit('keyInput', $event.target.value)"/>
     </div>
 </template>
 
@@ -24,9 +24,10 @@ defineProps({
     isImage: { type: Boolean, require: true, default: false },
     type: { type: String, required: true },
     label: { type: String, required: true },
-    identiy: { type: String, required: true }, 
+    identity: { type: String, required: true }, 
     placeholder: { type: String, required: false, default: '' },
-    readonly: { type: String, required: false, default: "0" }
+    readonly: { type: String, required: false, default: "0" },
+    modelValue: { type: [String, Number] }
 });
 
 </script>
