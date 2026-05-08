@@ -5,6 +5,8 @@ import DetailPage from "./components/pages/DetailPage.vue"
 import UserPage from "./components/pages/UserPage.vue"
 import Cookies from "js-cookie"
 import { store } from "./store/index"
+import NewRecipePage from "./components/pages/NewRecipePage.vue"
+import EditRecipePage from "./components/pages/EditRecipePage.vue";
 
 const checkAuth = () => {
     const jwtCookie = Cookies.get("jwt");
@@ -48,7 +50,20 @@ export const routes = [
         name: "userPage",
         component: UserPage,
         beforeEnter: (to, from, next) => {
-            // Jika checkAuth true, lanjut. Jika false, lempar ke halaman login
+            checkAuth() ? next() : next({ name: "login" });
+        }
+    },
+    {
+        path: "/new-recipe", name: "newRecipePage", component: NewRecipePage,
+        beforeEnter: (to, from, next) => {
+            checkAuth() ? next() : next({ name: "login" });
+        }
+    },
+    {
+        path: "/recipe/edit/:id",
+        name: "editRecipePage", 
+        component: EditRecipePage,
+        beforeEnter: (to, from, next) => {
             checkAuth() ? next() : next({ name: "login" });
         }
     }
