@@ -7,11 +7,14 @@
         <h2 class="mt-4">Log in to your account</h2>
         <p>Welcome back! Please enter your details.</p>
       </div>
-      <form>
-        <div class="my-4"><base-input type="email" identity="email" placeholder="Your username" label="Email"></base-input></div>
-        <div class="my-4"><base-input type="password" identity="password" placeholder="Your password" label="Password"></base-input></div>
-      </form>
+      <form @submit.prevent="login" >
+        <div class="my-4"><base-input type="email" identity="email" placeholder="Your username" label="Email"
+            v-model="loginData.email"></base-input></div>
+        <div class="my-4"><base-input type="password" identity="password" placeholder="Your password" label="Password"
+            v-model="loginData.password"></base-input></div>
+      
       <base-button class="login w-100 my-3">Login</base-button>
+      </form>
       <div class="text-center mt-4">
         <p class="fw-semibold">
           Don’t have an account?<span style="color: #4c4ddc">
@@ -22,11 +25,31 @@
         </p>
       </div>
     </div>
-    login
+
   </div>
 </template>
 
 <script setup>
 import BaseInput from '../ui/BaseInput.vue';
 import BaseButton from '../ui/BaseButton.vue';
+import { reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+const store = useStore();
+const router = useRouter();
+
+const loginData = reactive({
+  email: '',
+  password: '',
+  isLogin: true
+});
+
+const login = async () => {
+  await store.dispatch("auth/getLoginData", loginData);
+  router.push("/");
+}
+
+
+  
 </script>

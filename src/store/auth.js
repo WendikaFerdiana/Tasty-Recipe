@@ -22,6 +22,16 @@ export default {
         setUserLogin(state, { userData, loginStatus }) {
             state.userLogin = userData;
             state.isLogin = loginStatus;
+        },
+
+        setUserLogout(state) {
+            state.token = null;
+            state.userLogin = {};
+            state.isLogin = false;
+            state.tokenExpirationDate = null;
+            Cookies.remove("jwt");
+            Cookies.remove("tokenExpirationDate");
+            Cookies.remove("UID");
         }
     },
     actions: {
@@ -65,9 +75,47 @@ export default {
                     userData: payload,
                     loginStatus: true
                 });
-            }  
+            }
             catch (err) {
-                console.error(err); 
+                console.error(err);
+            }
+        },
+
+        async getLoginData({ commit, dispatch }, payload) {
+            const APIKey = "AIzaSyAZw4XY-USmeiN9j1cLmxJ8W8mu_l2a19U";
+            const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=`;
+
+            try {
+                const { data } = await axios.post(authUrl + APIKey, {
+                    email: payload.email,
+                    password: payload.password,
+                    returnSecureToken: true,
+                });
+                commit("setToken", {
+                    idToken: data.idToken,
+                    expiresIn: new Date().getTime() + Number.parseInt(data.expiresIn) * 1000
+                });
+                await dispatch("getUser", data.localId);
+            } catch (err) {
+                console.error(err);
+            }
+        },
+
+        async getUser({ commit }, payload) {
+            try {
+                const { data } = await axios.get(`https://recipe-vue-batch2-default-rtdb.firebaseio.com/user.json`);
+                for (let key in data) {
+                    if (data[key].userId === payload) {
+                        Cookies.set("UID", data[key].userId);
+                        commit("setUserLogin", {
+                            userData: data[key],
+                            loginStatus: true
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+
             }
         }
     }
